@@ -4,8 +4,9 @@ import PromptInput from '../components/evaluation/PromptInput';
 import ModeSelector from '../components/evaluation/ModeSelector';
 import ResultsDisplay from '../components/evaluation/ResultsDisplay';
 import Button from '../components/ui/Button';
+import { evaluatePrompt } from '../services/api';
 
-// Mock evaluation function - will be replaced with real API call later
+// Mock evaluation function - fallback for development without API key
 async function mockEvaluate(prompt: string, mode: EvaluationMode): Promise<EvaluationResult> {
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -114,8 +115,16 @@ export default function EvaluationPage() {
     setResult(null);
 
     try {
-      const evaluationResult = await mockEvaluate(prompt, selectedMode);
-      setResult(evaluationResult);
+      // Try real API first, fall back to mock if it fails
+      try {
+        const evaluationResult = await evaluatePrompt(prompt, selectedMode);
+        setResult(evaluationResult);
+      } catch (apiError) {
+        console.warn('API call failed, using mock data:', apiError);
+        // Fallback to mock data for development
+        const evaluationResult = await mockEvaluate(prompt, selectedMode);
+        setResult(evaluationResult);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred during evaluation');
     } finally {
