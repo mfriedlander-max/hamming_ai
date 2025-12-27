@@ -1,6 +1,8 @@
 import { EvaluationResult } from '../../types';
 import { Loader2, CheckCircle, XCircle, Lightbulb } from 'lucide-react';
 import Card from '../ui/Card';
+import ScoreCard from './ScoreCard';
+import LoadingState from './LoadingState';
 
 interface ResultsDisplayProps {
   loading: boolean;
@@ -30,10 +32,7 @@ export default function ResultsDisplay({ loading, result, error }: ResultsDispla
   if (loading) {
     return (
       <Card className="p-8 flex flex-col items-center justify-center min-h-[400px]">
-        <Loader2 className="w-12 h-12 text-primary-600 animate-spin mb-4" />
-        <p className="text-lg text-gray-700 dark:text-gray-300">
-          Analyzing your prompt...
-        </p>
+        <LoadingState message="Analyzing your prompt..." />
       </Card>
     );
   }
@@ -77,25 +76,7 @@ export default function ResultsDisplay({ loading, result, error }: ResultsDispla
           </h3>
           <div className="space-y-4">
             {result.scores.map((score, index) => (
-              <div key={index}>
-                <div className="flex justify-between mb-2">
-                  <span className="text-gray-700 dark:text-gray-300 font-medium">
-                    {score.category}
-                  </span>
-                  <span className="text-gray-900 dark:text-white font-semibold">
-                    {score.score.toFixed(1)}/10
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                  <div
-                    className="bg-gradient-to-r from-primary-600 to-accent-600 h-2 rounded-full transition-all duration-500"
-                    style={{ width: `${score.score * 10}%` }}
-                  />
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  {score.description}
-                </p>
-              </div>
+              <ScoreCard key={index} score={score} index={index} />
             ))}
           </div>
         </Card>
