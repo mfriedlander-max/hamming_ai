@@ -4,65 +4,60 @@ import { EvaluationResult } from '../../types';
  * Build the system prompt for Claude to evaluate a research mode prompt
  */
 export function buildResearchModePrompt(userPrompt: string): string {
-  return `You are an expert AI prompt evaluator specializing in research and information-gathering prompts.
-
-Evaluate the following user prompt for use in research tasks with AI assistants like ChatGPT, Claude, or Perplexity.
+  return `You evaluate research and information-gathering prompts for scope clarity, depth indicators, source requirements, and format expectations.
 
 USER PROMPT TO EVALUATE:
 """
 ${userPrompt}
 """
 
-Analyze this prompt based on these criteria:
-1. **Scope Clarity**: Is the research scope well-defined? Is it broad enough to be useful but focused enough to be manageable?
-2. **Depth Indicators**: Does it specify the level of detail or depth needed (overview, detailed analysis, comprehensive review)?
-3. **Source Requirements**: Are preferred source types mentioned (academic papers, industry reports, recent studies, historical data)?
-4. **Format Expectations**: Is the desired output format clear (summary, detailed report, comparison, bullet points, etc.)?
+EVALUATION CRITERIA:
+- **Scope Clarity**: Are topic boundaries and focus areas well-defined?
+- **Depth Indicators**: Is the required level of detail and technical depth specified?
+- **Source Requirements**: Are preferred source types, time periods, and credibility levels indicated?
+- **Format Expectations**: Is the desired structure, citation style, and length clear?
 
-Provide your evaluation in the following JSON format:
+SCORING RUBRIC:
+- 1-4: Major issues, unclear or problematic
+- 5-6: Workable but needs improvement
+- 7-8: Good, minor improvements possible
+- 9-10: Excellent, well-crafted
+
+EXAMPLE:
+Good: "Research peer-reviewed studies from 2020-2024 on CRISPR gene editing in agriculture, focusing on corn and wheat. Provide a 2-page summary with citations."
+Poor: "Research CRISPR stuff"
+
+OUTPUT REQUIREMENTS:
+- Return valid JSON only (no markdown, no extra text)
+- Exactly 4 category scores: "Scope Clarity", "Depth Indicators", "Source Requirements", "Format Expectations"
+- Category descriptions: Brief phrases (40-60 chars)
+- 3-5 strengths, 2-4 weaknesses, 3-5 suggestions (all brief phrases, 50-100 chars)
+- Overall score = average of 4 category scores
+
+JSON FORMAT:
 {
-  "overallScore": <number between 0-10>,
+  "overallScore": 7.5,
   "scores": [
-    {
-      "category": "Scope Clarity",
-      "score": <number between 0-10>,
-      "description": "<brief explanation of the score>"
-    },
-    {
-      "category": "Depth Indicators",
-      "score": <number between 0-10>,
-      "description": "<brief explanation of the score>"
-    },
-    {
-      "category": "Source Requirements",
-      "score": <number between 0-10>,
-      "description": "<brief explanation of the score>"
-    },
-    {
-      "category": "Format Expectations",
-      "score": <number between 0-10>,
-      "description": "<brief explanation of the score>"
-    }
+    {"category": "Scope Clarity", "score": 8.0, "description": "Research topic is well-defined and focused"},
+    {"category": "Depth Indicators", "score": 7.0, "description": "Detail level specified, could be more precise"},
+    {"category": "Source Requirements", "score": 7.5, "description": "Source types and timeframe mentioned"},
+    {"category": "Format Expectations", "score": 7.5, "description": "Output format and length are clear"}
   ],
   "strengths": [
-    "<strength 1>",
-    "<strength 2>",
-    "<strength 3>"
+    "Clear research scope with specific focus area",
+    "Time period and source types specified",
+    "Output format requirements are clear"
   ],
   "weaknesses": [
-    "<weakness 1>",
-    "<weakness 2>",
-    "<weakness 3>"
+    "Could specify preferred depth of technical detail",
+    "Citation style not mentioned"
   ],
   "suggestions": [
-    "<actionable suggestion 1>",
-    "<actionable suggestion 2>",
-    "<actionable suggestion 3>",
-    "<actionable suggestion 4>"
+    "Specify desired technical depth (high-level overview vs detailed analysis)",
+    "Mention preferred citation style (APA, MLA, Chicago, etc.)",
+    "Add any specific subtopics or questions to address"
   ]
-}
-
-Focus on helping improve research prompts. Suggest specifying time frames, source preferences, depth levels, citation needs, and intended use cases. The overall score should be the average of the four category scores.`;
+}`;
 }
 
 /**

@@ -4,65 +4,60 @@ import { EvaluationResult } from '../../types';
  * Build the system prompt for Claude to evaluate a coding mode prompt
  */
 export function buildCodingModePrompt(userPrompt: string): string {
-  return `You are an expert AI prompt evaluator specializing in technical and coding-related prompts.
-
-Evaluate the following user prompt for use in requesting coding assistance from AI assistants like ChatGPT, Claude, or GitHub Copilot.
+  return `You evaluate technical and coding prompts for specificity, context, output expectations, and edge case handling.
 
 USER PROMPT TO EVALUATE:
 """
 ${userPrompt}
 """
 
-Analyze this prompt based on these criteria:
-1. **Technical Specificity**: Does it specify language, framework, versions, or libraries needed?
-2. **Context**: Is there enough technical context (codebase structure, constraints, existing code)?
-3. **Expected Output**: Is it clear what deliverable is expected (function, class, full app, snippet)?
-4. **Edge Cases**: Are edge cases, error handling, or special scenarios mentioned?
+EVALUATION CRITERIA:
+- **Tech Specificity**: Does it specify language, version, libraries, and frameworks?
+- **Context**: Are constraints, dependencies, and existing code described?
+- **Expected Output**: Is the desired format, style, and documentation clear?
+- **Edge Cases**: Does it address error handling and validation needs?
 
-Provide your evaluation in the following JSON format:
+SCORING RUBRIC:
+- 1-4: Major issues, unclear or problematic
+- 5-6: Workable but needs improvement
+- 7-8: Good, minor improvements possible
+- 9-10: Excellent, well-crafted
+
+EXAMPLE:
+Good: "Write a Python 3.11 function using requests library to fetch JSON from an API with retry logic and error handling"
+Poor: "Write code to get data from API"
+
+OUTPUT REQUIREMENTS:
+- Return valid JSON only (no markdown, no extra text)
+- Exactly 4 category scores: "Tech Specificity", "Context", "Expected Output", "Edge Cases"
+- Category descriptions: Brief phrases (40-60 chars)
+- 3-5 strengths, 2-4 weaknesses, 3-5 suggestions (all brief phrases, 50-100 chars)
+- Overall score = average of 4 category scores
+
+JSON FORMAT:
 {
-  "overallScore": <number between 0-10>,
+  "overallScore": 7.5,
   "scores": [
-    {
-      "category": "Technical Specificity",
-      "score": <number between 0-10>,
-      "description": "<brief explanation of the score>"
-    },
-    {
-      "category": "Context",
-      "score": <number between 0-10>,
-      "description": "<brief explanation of the score>"
-    },
-    {
-      "category": "Expected Output",
-      "score": <number between 0-10>,
-      "description": "<brief explanation of the score>"
-    },
-    {
-      "category": "Edge Cases",
-      "score": <number between 0-10>,
-      "description": "<brief explanation of the score>"
-    }
+    {"category": "Tech Specificity", "score": 8.0, "description": "Language and libraries clearly specified"},
+    {"category": "Context", "score": 7.0, "description": "Good technical context, could add constraints"},
+    {"category": "Expected Output", "score": 7.5, "description": "Output format is reasonably clear"},
+    {"category": "Edge Cases", "score": 7.5, "description": "Some error handling mentioned"}
   ],
   "strengths": [
-    "<strength 1>",
-    "<strength 2>",
-    "<strength 3>"
+    "Clear technical requirements specified",
+    "Appropriate language and framework mentioned",
+    "Good understanding of desired functionality"
   ],
   "weaknesses": [
-    "<weakness 1>",
-    "<weakness 2>",
-    "<weakness 3>"
+    "Missing specific version numbers",
+    "Could specify error handling requirements more clearly"
   ],
   "suggestions": [
-    "<actionable suggestion 1>",
-    "<actionable suggestion 2>",
-    "<actionable suggestion 3>",
-    "<actionable suggestion 4>"
+    "Add specific version numbers (e.g., Python 3.11, requests 2.31+)",
+    "Specify desired error handling behavior",
+    "Mention code style preferences (PEP8, type hints, etc.)"
   ]
-}
-
-Focus on making your feedback specific to coding prompts. Suggest improvements like specifying versions, mentioning frameworks, including example inputs/outputs, describing edge cases, or clarifying code style preferences. The overall score should be the average of the four category scores.`;
+}`;
 }
 
 /**

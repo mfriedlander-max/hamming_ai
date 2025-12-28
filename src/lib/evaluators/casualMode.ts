@@ -4,63 +4,60 @@ import { EvaluationResult } from '../../types';
  * Build the system prompt for Claude to evaluate a casual mode prompt
  */
 export function buildCasualModePrompt(userPrompt: string): string {
-  return `You are an expert AI prompt evaluator specializing in casual, everyday conversations with AI assistants.
-
-Evaluate the following user prompt for use in casual conversations with AI assistants like ChatGPT or Claude.
+  return `You evaluate conversational AI prompts for clarity, tone, context, and specificity.
 
 USER PROMPT TO EVALUATE:
 """
 ${userPrompt}
 """
 
-Analyze this prompt based on these criteria:
-1. **Clarity**: Is the request clear and easy to understand?
-2. **Tone**: Is the tone appropriate for casual conversation? Is it friendly?
-3. **Context**: Is there enough context for the AI to provide a helpful response?
-4. **Specificity**: Is the prompt specific enough without being overly rigid?
+EVALUATION CRITERIA:
+- **Clarity**: Is the request unambiguous with clear intent?
+- **Tone**: Is it appropriately friendly and conversational?
+- **Context**: Is necessary background information provided?
+- **Specificity**: Is the detail level balanced (not too vague or overly specific)?
 
-Provide your evaluation in the following JSON format:
+SCORING RUBRIC:
+- 1-4: Major issues, unclear or problematic
+- 5-6: Workable but needs improvement
+- 7-8: Good, minor improvements possible
+- 9-10: Excellent, well-crafted
+
+EXAMPLE:
+Good: "Explain quantum entanglement in simple terms for a high school student"
+Poor: "Tell me about quantum stuff"
+
+OUTPUT REQUIREMENTS:
+- Return valid JSON only (no markdown, no extra text)
+- Exactly 4 category scores: "Clarity", "Tone", "Context", "Specificity"
+- Category descriptions: Brief phrases (40-60 chars)
+- 3-5 strengths, 2-4 weaknesses, 3-5 suggestions (all brief phrases, 50-100 chars)
+- Overall score = average of 4 category scores
+
+JSON FORMAT:
 {
-  "overallScore": <number between 0-10>,
+  "overallScore": 7.5,
   "scores": [
-    {
-      "category": "Clarity",
-      "score": <number between 0-10>,
-      "description": "<brief explanation of the score>"
-    },
-    {
-      "category": "Tone",
-      "score": <number between 0-10>,
-      "description": "<brief explanation of the score>"
-    },
-    {
-      "category": "Context",
-      "score": <number between 0-10>,
-      "description": "<brief explanation of the score>"
-    },
-    {
-      "category": "Specificity",
-      "score": <number between 0-10>,
-      "description": "<brief explanation of the score>"
-    }
+    {"category": "Clarity", "score": 8.0, "description": "Your request is clear and easy to understand"},
+    {"category": "Tone", "score": 7.0, "description": "Friendly tone, could be slightly more specific"},
+    {"category": "Context", "score": 7.5, "description": "Good context provided"},
+    {"category": "Specificity", "score": 7.5, "description": "Specific enough for casual conversation"}
   ],
   "strengths": [
-    "<strength 1>",
-    "<strength 2>",
-    "<strength 3>"
+    "Clear and concise request",
+    "Friendly conversational tone",
+    "Adequate context for the AI to respond"
   ],
   "weaknesses": [
-    "<weakness 1>",
-    "<weakness 2>"
+    "Could specify desired response format",
+    "Missing some contextual details that might improve response quality"
   ],
   "suggestions": [
-    "<actionable suggestion 1>",
-    "<actionable suggestion 2>",
-    "<actionable suggestion 3>"
+    "Consider adding what format you want the response in (bullet points, paragraph, etc.)",
+    "Mention if you want examples or explanations",
+    "Add any relevant background information"
   ]
-}
-
-Focus on making your feedback constructive, specific, and actionable. The overall score should be the average of the four category scores.`;
+}`;
 }
 
 /**

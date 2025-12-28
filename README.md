@@ -59,13 +59,27 @@ A web application that provides intelligent feedback on AI prompts using Claude 
 
 ### Development
 
-Run the development server:
+**Option 1: With Vercel (enables API functions)**
+
+Run this command to start the dev server with working API:
+
+```bash
+vercel dev
+```
+
+The app will be available at [http://localhost:3000](http://localhost:3000)
+
+Your `.env` file will be automatically loaded and `/api/evaluate` will work.
+
+**Option 2: Vite Only (without API)**
+
+Run this for faster development without the API:
 
 ```bash
 npm run dev
 ```
 
-The app will be available at [http://localhost:5173](http://localhost:5173)
+This runs at [http://localhost:5173](http://localhost:5173) but `/api/evaluate` won't work (will use mock data fallback).
 
 ### Build
 
@@ -85,19 +99,21 @@ npm run preview
 
 ### Deploy to Vercel (Recommended)
 
-1. Install Vercel CLI:
+1. Deploy using the local Vercel CLI:
    ```bash
-   npm install -g vercel
+   npx vercel
    ```
 
-2. Deploy:
-   ```bash
-   vercel
-   ```
+2. Follow the prompts to link/create your project
 
 3. Add environment variable in Vercel dashboard:
    - Go to Project Settings → Environment Variables
    - Add `ANTHROPIC_API_KEY` with your API key
+
+4. Deploy to production:
+   ```bash
+   npx vercel --prod
+   ```
 
 ### Deploy to Netlify
 
